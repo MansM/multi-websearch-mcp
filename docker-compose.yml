@@ -1,0 +1,32 @@
+# multi-websearch – external web-search backend
+#
+# Usage:
+#   1. Copy .env.example → .env and fill API keys
+#   2. docker compose up -d
+#   3. Point agent at http://multi-websearch:8018/search
+#      (or http://localhost:8018/search from the host)
+
+services:
+  multi-websearch:
+    build: .
+    image: multi-websearch:latest
+    container_name: multi-websearch
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    ports:
+      - "8018:8018"
+    env_file:
+      - .env
+    environment:
+      # These override / complement .env if you prefer compose-level config
+      SERVER_HOST: "0.0.0.0"
+      SERVER_PORT: "8018"
+      # SEARCH_PROVIDERS: "ollama,tavily,brave,searxng"
+      # SEARXNG_URL: "http://searxng:8080/search"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8018/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
