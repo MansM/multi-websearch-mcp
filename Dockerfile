@@ -1,6 +1,6 @@
 # multi-websearch – Open WebUI external search endpoint
 # Build:  docker build -t multi-websearch .
-# Run:    docker run --rm -p 8000:8000 --env-file .env multi-websearch
+# Run:    docker run --rm -p 8018:8018 --env-file .env multi-websearch
 
 FROM python:3.12-slim AS base
 
@@ -25,7 +25,7 @@ RUN pip install --no-cache-dir .
 RUN useradd --create-home --shell /bin/sh appuser
 USER appuser
 
-EXPOSE 8000
+EXPOSE 8018
 
 # Defaults – override with -e / --env-file
 ENV SERVER_HOST=0.0.0.0 \

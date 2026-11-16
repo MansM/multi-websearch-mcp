@@ -41,15 +41,15 @@ cp .env.example .env
 docker compose up -d --build
 
 # 3. Check
-curl http://localhost:8000/health
-curl http://localhost:8000/status
+curl http://localhost:8018/health
+curl http://localhost:8018/status
 ```
 
 Plain Docker (no compose):
 
 ```bash
 docker build -t multi-websearch .
-docker run --rm -p 8000:8000 --env-file .env multi-websearch
+docker run --rm -p 8018:8018 --env-file .env multi-websearch
 ```
 
 Open WebUI → Admin → Web Search:
@@ -57,13 +57,13 @@ Open WebUI → Admin → Web Search:
 | Setting | Value |
 |---------|-------|
 | Engine | **external** |
-| URL | `http://host.docker.internal:8000/search` (or the container name if same network) |
+| URL | `http://host.docker.internal:8018/search` (or the container name if same network) |
 | API Key | value of `EXTERNAL_SEARCH_API_KEY` (or blank) |
 
 To put multi-websearch on the same Docker network as Open WebUI, uncomment the `networks` sections in `docker-compose.yml` and set:
 
 ```
-EXTERNAL_WEB_SEARCH_URL=http://multi-websearch:8000/search
+EXTERNAL_WEB_SEARCH_URL=http://multi-websearch:8018/search
 ```
 
 An optional SearXNG service is commented in `docker-compose.yml` if you want a self-hosted fallback.
@@ -91,7 +91,7 @@ SEARCH_TIMEOUT=15
 
 # Open WebUI / HTTP server
 SERVER_HOST=0.0.0.0
-SERVER_PORT=8000
+SERVER_PORT=8018
 EXTERNAL_SEARCH_API_KEY=optional-secret   # if set, Open WebUI must send the same key
 ```
 
@@ -138,7 +138,7 @@ multi-websearch --providers searxng,brave "test query" -v
 # with keys already in the environment
 multi-websearch-server
 # or
-uvicorn multi_websearch.server:app --host 0.0.0.0 --port 8000
+uvicorn multi_websearch.server:app --host 0.0.0.0 --port 8018
 ```
 
 2. In Open WebUI Admin → Settings → Web Search:
@@ -147,7 +147,7 @@ uvicorn multi_websearch.server:app --host 0.0.0.0 --port 8000
 |---------|-------|
 | Enable Web Search | On |
 | Web Search Engine | **external** |
-| External Web Search URL | `http://<host>:8000/search` |
+| External Web Search URL | `http://<host>:8018/search` |
 | External Web Search API Key | same value as `EXTERNAL_SEARCH_API_KEY` (or leave blank) |
 
 3. The server implements the exact contract Open WebUI expects:
