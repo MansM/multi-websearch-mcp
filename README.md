@@ -166,6 +166,69 @@ Health / diagnostics:
 
 ---
 
+## OpenCode integration (MCP)
+
+The server also exposes the same search engine over **MCP** (streamable HTTP) at `/mcp`, with two tools:
+
+| Tool         | Purpose                                                                   |
+|--------------|---------------------------------------------------------------------------|
+| `search_web` | Ordered multi-provider search (`query`, optional `max_results` up to 10) |
+| `get_status` | Configured / active / skipped providers                                   |
+
+### 1. Connect the MCP server
+
+```bash
+opencode mcp add websearch --global --url http://localhost:8018/mcp
+opencode mcp list          # → ✓ websearch  connected
+```
+
+…or configure it by hand under `mcp.servers` in `opencode.json(c)`:
+
+```jsonc
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "servers": {
+      "websearch": {
+        "type": "remote",
+        "url": "http://localhost:8018/mcp"
+      }
+    }
+  }
+}
+```
+
+### 2. Teach agents how to use it
+
+This repo ships [`docs/opencode-instructions.md`](docs/opencode-instructions.md) —
+drop-in agent guidance (available tools, correct calling conventions, dead-session
+recovery). Add it to `instructions` in your OpenCode config so it loads in every
+project — paths can be absolute, `~/…`, or a URL, e.g. in `~/.config/opencode/opencode.json`:
+
+```jsonc
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "~/code/multi-websearch/docs/opencode-instructions.md"
+    // or: "https://raw.githubusercontent.com/MansM/multi-websearch-mcp/master/docs/opencode-instructions.md"
+  ]
+}
+```
+
+Alternatively, paste its contents into a project `AGENTS.md`.
+
+### 3. Optional: disable OpenCode's built-in web search
+
+```jsonc
+{
+  "tools": { "websearch": false }
+}
+```
+
+…so agents use this server's configured providers instead.
+
+---
+
 ## Adding a new provider (plugin)
 
 1. Create `multi_websearch/providers/myprovider.py`:
