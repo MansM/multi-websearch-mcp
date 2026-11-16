@@ -1,9 +1,9 @@
 """Minimal smoke tests (no live network calls)."""
 
+from multi_websearch.config import Settings
 from multi_websearch.models import SearchResult
 from multi_websearch.providers.base import list_providers
 from multi_websearch.search import WebSearch
-from multi_websearch.config import Settings
 
 
 def test_plugins_registered():

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-from typing import List
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -54,10 +53,10 @@ class Settings(BaseSettings):
         default=None, validation_alias="EXTERNAL_SEARCH_API_KEY"
     )
 
-    def provider_order(self) -> List[str]:
+    def provider_order(self) -> list[str]:
         return [p.strip().lower() for p in self.search_providers.split(",") if p.strip()]
 
-    def searxng_urls(self) -> List[str]:
+    def searxng_urls(self) -> list[str]:
         urls = [self.searxng_url.strip()]
         if self.searxng_fallback_urls:
             urls.extend(

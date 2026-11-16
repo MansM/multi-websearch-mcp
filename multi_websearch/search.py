@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Sequence
+from collections.abc import Sequence
 
 from multi_websearch.config import Settings, load_settings
 from multi_websearch.exceptions import AuthError, ProviderError, RateLimitError, TemporaryError

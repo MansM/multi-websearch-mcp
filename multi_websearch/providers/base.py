@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Dict, Type
 
 from multi_websearch.models import SearchResult
 
@@ -36,10 +35,10 @@ class SearchProvider(ABC):
 # Simple plugin registry
 # ---------------------------------------------------------------------------
 
-_REGISTRY: Dict[str, Type[SearchProvider]] = {}
+_REGISTRY: dict[str, type[SearchProvider]] = {}
 
 
-def register(cls: Type[SearchProvider]) -> Type[SearchProvider]:
+def register(cls: type[SearchProvider]) -> type[SearchProvider]:
     """Decorator / helper to register a provider class by its `.name`."""
     if not getattr(cls, "name", None):
         raise ValueError(f"{cls} must define a class attribute `name`")
